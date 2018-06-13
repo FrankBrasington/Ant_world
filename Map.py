@@ -26,9 +26,9 @@ world_length = 800
 screen = pygame.display.set_mode((world_width, world_length))
 
 class Ant():
-    o_type = "ant"
 
-    def __init__(self, start_x, start_y, color):
+    def __init__(self, start_x, start_y, color, type):
+        self.o_type = type
         #for the starting x and y
         self.loc_x = start_x
         self.loc_y = start_y
@@ -74,7 +74,7 @@ class Ant():
         if self.loc_x + self.radius > world_width:
             self.loc_x = world_width - self.radius
         if self.loc_x - self.radius < 0:
-            self.loc_x = world_width + self.radius
+            self.loc_x = 0 + self.radius
 
     def move(self, movement=0, turn=0):
         self.angle += turn
@@ -101,6 +101,22 @@ class Ant():
                 if o.o_type == "Food" and self.food == None:
                     self.food = o
                     self.has_food = True
+                #testing the giving of food
+                if o.o_type == "Queen" and self.food != None:
+                    self.give_food(o)
+
+    #this transfer the food object to the other ant
+    def give_food(self, ant_object):
+        if self.food != None:
+            if ant_object.has_food == False:
+                #give the food object
+                ant_object.food = self.food
+                #removes the food object
+                self.food = None
+                #changes the status for the two ants
+                self.has_food = False
+                ant_object.has_food = True
+
 
 
 #this is for the food that the ants will be collecting and eating
@@ -134,7 +150,10 @@ def main():
     running = True
 
     #makes 1 ant
-    a = Ant(300, 500, red)
+    a = Ant(300, 500, red, "ant")
+
+    #creates a Queen ant for testing
+    q = Ant(300, 400, blue, "Queen")
 
     #makes 1 food pellet
     p = Food(500,500)
@@ -145,7 +164,11 @@ def main():
 
     #adds the ant and the food pellet
     ants.append(a)
+    ants.append(q)
     food.append(p)
+
+    #this is all the objects in the ant world
+    w_objects = ants + food
 
     #the main loop function
     while running:
@@ -159,18 +182,26 @@ def main():
         screen.fill(white)
 
         #does all the move actions for the ants
-        for a in ants:
-            a.move()
+        #for a in ants:
+        a.move()
 
         #draws all the stuff in our world
-        for a in ants:
-            a.update()
+        for n in ants:
+            n.update()
         for f in food:
             f.update()
 
         #checks to see if the food is in the sensor
-        a.sense(p)
-        a.move(1)
+        #for x in w_objects:
+        a.sense(q)
+        a.sense(f)
+
+        #for testing
+        if a.has_food == False:
+            a.move(1)
+        else:
+            a.move(-1)
+
 
         #this sets the game to 60 FPS
         pygame.display.update()
