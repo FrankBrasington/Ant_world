@@ -131,7 +131,7 @@ def main():
 
         #this sets the game to 60 FPS
         pygame.display.update()
-        clock.tick(10)
+        clock.tick(60)
 
 #runs this if this file is the main script
 if __name__ == "__main__":
