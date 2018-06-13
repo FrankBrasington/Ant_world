@@ -43,13 +43,13 @@ class Ant():
         self.sensor_x = self.loc_x
         self.s_distance = 15
         #x and y of the sensor
-        self.s_x = self.loc_x
+        self.s_x = self.loc_x + self.s_distance
         self.s_y = self.loc_y
         #sets the starting angle
         self.angle = 0
         body = pygame.draw.circle(screen, self.color, (self.loc_x, self.loc_y), self.radius, 0)
         #these are the left and right senseors
-        sensor = pygame.draw.circle(screen, blue , (self.loc_x+self.s_distance, self.loc_y), 3, 0)
+        sensor = pygame.draw.circle(screen, blue, (self.s_x, self.s_y), 3, 0)
 
         #this area is for all the variables such as if the ant is carrying food
         self.has_food = False
@@ -117,8 +117,6 @@ class Ant():
                 self.has_food = False
                 ant_object.has_food = True
 
-
-
 #this is for the food that the ants will be collecting and eating
 class Food():
     o_type = "Food"
@@ -138,7 +136,6 @@ class Food():
         self.loc_y = y
         self.loc_x = x
 
-
 #this is the main function
 def main():
 
@@ -153,7 +150,7 @@ def main():
     a = Ant(300, 500, red, "ant")
 
     #creates a Queen ant for testing
-    q = Ant(300, 400, blue, "Queen")
+    q = Ant(300, 400, black, "Queen")
 
     #makes 1 food pellet
     p = Food(500,500)
